@@ -3,6 +3,7 @@
 import clsx from "clsx";
 import { useEffect, useRef, useState } from "react";
 import { ENVIRONMENT, PROJECT_ID } from "@/lib/firebase";
+import { DEMO_MODE } from "@/lib/demo/flag";
 import { roleLabel } from "@/lib/permissions";
 import { useSession } from "@/lib/session";
 import { Icon } from "@/ui/Icon";
@@ -13,18 +14,20 @@ import { applyPref, DEFAULT_PREF, readPref, THEME_CYCLE, type ThemePref } from "
 export function EnvBadge() {
   const prod = ENVIRONMENT === "production";
   const emu = ENVIRONMENT === "emulator";
+  // The emulator badge is a developer cue: never rendered by a production build.
+  if (emu && process.env.NODE_ENV === "production") return null;
   return (
     <span
       title={`Firebase project: ${PROJECT_ID}`}
       className={clsx(
-        "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-2xs font-bold uppercase tracking-wider",
+        "hidden items-center gap-1.5 rounded-full sm:inline-flex border px-2.5 py-0.5 text-2xs font-bold uppercase tracking-wider",
         prod && "border-danger/40 bg-danger-soft text-danger",
         emu && "border-success/40 bg-success-soft text-success",
         !prod && !emu && "border-warning/40 bg-warning-soft text-warning",
       )}
     >
       <span aria-hidden className={clsx("h-1.5 w-1.5 rounded-full", prod ? "bg-danger" : emu ? "bg-success" : "bg-warning")} />
-      {prod ? "Production" : emu ? "Local emulator" : PROJECT_ID}
+      {prod ? "Production" : DEMO_MODE ? "Dev · sample data" : emu ? "Dev · emulator" : PROJECT_ID}
     </span>
   );
 }
