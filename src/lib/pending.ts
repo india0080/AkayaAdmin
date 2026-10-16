@@ -49,9 +49,11 @@ export interface PendingQuery<T> {
 export function usePendingCallable<T>(key: PendingKey): PendingQuery<T> {
   const [data, setData] = useState<T | null>(null);
   useEffect(() => {
-    if (process.env.NODE_ENV === "production" || !DEMO_MODE) return; // keeps fixtures out of prod bundles
     let live = true;
-    void import("./demo/fixtures").then((m) => { if (live) setData(m.pendingFixture(key) as T); });
+    // Inline NODE_ENV check: webpack drops this branch (and the fixtures chunk) in production.
+    if (process.env.NODE_ENV !== "production" && DEMO_MODE) {
+      void import("./demo/fixtures").then((m) => { if (live) setData(m.pendingFixture(key) as T); });
+    }
     return () => { live = false; };
   }, [key]);
   return { data, pending: !DEMO_MODE, contract: PENDING[key] };
