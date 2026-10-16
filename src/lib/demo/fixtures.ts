@@ -7,7 +7,7 @@ import type { PendingKey } from "../pending";
 let seed = 7;
 const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
 const int = (lo: number, hi: number) => Math.round(lo + rnd() * (hi - lo));
-const NOW = Date.UTC(2026, 9, 16, 11, 30);
+const NOW = Date.now();
 const day = (i: number) => new Date(NOW - i * 86_400_000).toISOString().slice(0, 10);
 
 const GEO: [string, string, number][] = [["IN", "India", 48210], ["US", "United States", 9120], ["GB", "United Kingdom", 4210], ["AE", "United Arab Emirates", 3380],

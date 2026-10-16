@@ -136,7 +136,7 @@ export default function OverviewPage() {
         <Panel title="Platform split" description="Sessions by platform · 30 days">
           {!t ? <Skeleton className="h-64 w-full" /> : !devices.length ? <p className="text-sm text-fg-muted">No sessions recorded yet.</p> : <>
             <div className="mx-auto h-40 w-40" aria-hidden><ResponsiveContainer width="100%" height="100%"><PieChart><Pie data={devices} dataKey="value" nameKey="key" innerRadius="65%" outerRadius="95%" stroke="none" isAnimationActive={false}>{devices.map((x) => <Cell key={x.key} fill={platformColor(x.key)} />)}</Pie></PieChart></ResponsiveContainer></div>
-            <ul className="mt-3 space-y-1.5 text-sm">{devices.map((x) => <li key={x.key} className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full" style={{ background: platformColor(x.key) }} /><span className="flex-1 capitalize">{PLATFORMS.find((p) => p.id === x.key)?.label ?? x.key}</span><strong>{x.pct}%</strong></li>)}</ul>
+            <ul className="mt-3 space-y-1.5 text-sm">{devices.map((x) => <li key={x.key} className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full" style={{ background: platformColor(x.key) }} /><span className="flex-1">{PLATFORMS.find((p) => p.id === x.key)?.label ?? x.key}</span><strong>{x.pct}%</strong></li>)}</ul>
           </>}
         </Panel>
       </div>

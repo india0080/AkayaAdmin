@@ -45,7 +45,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
       className={clsx(
         "ui-btn inline-flex items-center justify-center whitespace-nowrap rounded-md font-medium transition-colors",
         `ui-btn-${variant}`,
-        "disabled:cursor-not-allowed disabled:opacity-50",
+        "disabled:cursor-not-allowed disabled:opacity-70 disabled:saturate-50",
         VARIANT[variant],
         SIZE[size],
         className,
@@ -79,7 +79,7 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(functio
       title={label}
       className={clsx(
         "inline-flex shrink-0 items-center justify-center rounded-md transition-colors",
-        "disabled:cursor-not-allowed disabled:opacity-50",
+        "disabled:cursor-not-allowed disabled:opacity-70 disabled:saturate-50",
         size === "sm" ? "h-8 w-8" : "h-9 w-9",
         variant === "ghost"
           ? "text-fg-muted hover:bg-raised hover:text-fg"

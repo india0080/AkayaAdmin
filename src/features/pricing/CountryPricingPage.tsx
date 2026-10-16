@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useCan } from "@/lib/session";
 import { useCallable } from "@/lib/useCallable";
-import { Badge, Button, Field, Icon, Notice, PageHeader, PermissionDenied, Select, Tabs, type TabDef } from "@/ui";
+import { Badge, Button, ErrorSummary, Field, Icon, Notice, PageHeader, PermissionDenied, Select, Tabs, type TabDef } from "@/ui";
 import type { PlanRow } from "../revenue/types";
 import { useTarget } from "../config/useConfig";
 import { BulkPanel } from "./BulkPanel";
@@ -142,12 +142,16 @@ export default function CountryPricingPage() {
           Applies to NEW orders only; existing subscriptions are unaffected. Prices are whole minor units of each country&apos;s currency and are never converted between currencies. Old app versions are always charged the India (INR) legacy price.
         </Notice>
         {!ui.showEditControls ? <Notice tone="info">You can browse, preview and export prices. Changing them needs the plans.modify permission.</Notice> : null}
-        {reg.error && !reg.data ? <Notice tone="warning">The server registry could not be read ({reg.error.message}); the built-in country table is used.</Notice> : null}
-        {pol.error && !pol.data ? <Notice tone="warning">The pricing policy could not be read ({pol.error.message}). Country enabling and the policy are unavailable until the backend answers.</Notice> : null}
+        {/* One combined banner for every failed read (built-in country table is used while the registry is down). */}
+        <ErrorSummary
+          onRetry={() => { reg.reload(); pol.reload(); prices.reload(); }}
+          errors={[
+            { label: "Country registry", error: reg.data ? null : reg.error },
+            { label: "Pricing policy", error: pol.data ? null : pol.error },
+            { label: "Prices", error: prices.data ? null : prices.error },
+          ]}
+        />
         {!storageOk ? <Notice tone="warning">This browser blocks session storage: your draft will not survive a page reload. Publish or export before leaving.</Notice> : null}
-        {prices.error && !prices.data ? (
-          <Notice tone="danger" title="Prices could not be loaded" action={<Button size="sm" onClick={prices.reload}>Retry</Button>}>{prices.error.message}</Notice>
-        ) : null}
         {ui.showPublish && diff.counts.total > 0 ? (
           <Notice
             tone="warning"
