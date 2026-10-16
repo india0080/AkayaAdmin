@@ -3,6 +3,7 @@
 // Deterministic (seeded) so screenshots are stable.
 
 import type { PendingKey } from "../pending";
+import { PAGE_FIXTURES } from "./pageFixtures";
 
 let seed = 7;
 const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
@@ -56,6 +57,7 @@ const REAL: Record<string, (data: Record<string, unknown>) => unknown> = {
     byModel: {}, byPlan: {}, byOutcome: {}, generatedAt: NOW })) }),
   "adminBilling:summary": billing,
   "adminTraffic": (d) => traffic(Number(d.days ?? 30)),
+  ...PAGE_FIXTURES,
 };
 
 /// Demo response for a REAL callable, or undefined (the call then fails as
