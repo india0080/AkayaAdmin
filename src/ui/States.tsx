@@ -3,6 +3,7 @@
 import clsx from "clsx";
 import type { ReactNode } from "react";
 import { Icon } from "./Icon";
+import { useReportPageError } from "./PageErrors";
 
 export function Spinner({ size = 16, className }: { size?: number; className?: string }) {
   return (
@@ -68,6 +69,16 @@ export function ErrorState({
   onRetry?: () => void;
   compact?: boolean;
 }) {
+  // Inside the console shell the page banner shows the message once; here we
+  // keep only a small placeholder so the layout still says what is missing.
+  const banner = useReportPageError({ title, message, onRetry });
+  if (banner) {
+    return (
+      <div role="status" className="flex items-center gap-2 rounded-lg border border-dashed border-line px-3 py-3 text-sm text-fg-muted">
+        <Icon name="alert-triangle" size={16} className="text-warning" /> {title} — see the notice above.
+      </div>
+    );
+  }
   return (
     <div role="alert">
       <StateFrame
@@ -150,17 +161,11 @@ export function Notice({
 /// One banner per page, however many reads failed: lists what is missing and
 /// retries all of them. Pages pass every query's error; nulls are ignored.
 export function ErrorSummary({ errors, onRetry }: { errors: { label: string; error: { message: string } | null }[]; onRetry?: () => void }) {
-  const failed = errors.filter((e) => e.error);
-  if (!failed.length) return null;
-  return (
-    <Notice
-      tone="warning"
-      title={failed.length === 1 ? `${failed[0].label} could not be loaded` : `${failed.length} sections could not be loaded`}
-      action={onRetry ? <button type="button" onClick={onRetry} className="font-medium underline">Retry all</button> : undefined}
-    >
-      {failed.length === 1 ? failed[0].error!.message : failed.map((f) => f.label).join(" · ")}
-    </Notice>
-  );
+  return <>{errors.map((e) => e.error ? <SummaryItem key={e.label} label={e.label} message={e.error.message} onRetry={onRetry} /> : null)}</>;
+}
+function SummaryItem({ label, message, onRetry }: { label: string; message: string; onRetry?: () => void }) {
+  const banner = useReportPageError({ title: `${label} could not be loaded`, message, onRetry });
+  return banner ? null : <Notice tone="warning" title={`${label} could not be loaded`}>{message}</Notice>;
 }
 
 /// The backend for this section is not deployed yet: say so plainly, name

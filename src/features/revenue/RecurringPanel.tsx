@@ -4,7 +4,7 @@ import { useState } from "react";
 import { callAdmin } from "@/lib/api";
 import { useCan } from "@/lib/session";
 import { useCallable } from "@/lib/useCallable";
-import { Badge, Button, ConfirmAction, Field, Notice, Panel, Skeleton, Switch, TextInput, relativeTime, useToast } from "@/ui";
+import { Badge, Button, ConfirmAction, ErrorState, Field, Notice, Panel, Skeleton, Switch, TextInput, relativeTime, useToast } from "@/ui";
 import { applyConfig, useTarget } from "../config/useConfig";
 import type { Snapshot } from "../config/logic";
 import { formatINR, parseRupeesToPaise } from "./logic";
@@ -43,7 +43,7 @@ export function RecurringPanel() {
   const canManage = can("subscription.manage");
   const canPrice = can("plans.modify");
 
-  if (q.error) return <Notice tone="warning">Auto-renew settings could not be loaded: {q.error.message}</Notice>;
+  if (q.error) return <ErrorState title="Auto-renew settings could not be loaded" message={q.error.message} onRetry={q.reload} />;
   if (!q.data) return <Skeleton className="mb-4 h-40" />;
 
   const version = q.data.version;

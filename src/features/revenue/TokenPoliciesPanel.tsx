@@ -3,7 +3,7 @@ import { useState } from "react";
 import { callAdmin } from "@/lib/api";
 import { useCallable } from "@/lib/useCallable";
 import { useCan } from "@/lib/session";
-import { Button, ConfirmAction, Field, Notice, Select, Switch, TextInput, useToast } from "@/ui";
+import { Button, ConfirmAction, ErrorState, Field, Notice, Select, Switch, TextInput, useToast } from "@/ui";
 
 type Policy = { enabled: boolean; unlimited: boolean; amount: number; cycle: string; rollover: number };
 type Policies = { version: number; plans: Record<string, Policy> };
@@ -17,7 +17,7 @@ export function TokenPoliciesPanel() {
   return <section className="mt-6 rounded-lg border border-line bg-panel p-5" aria-label="Token allowances">
     <h2 className="text-lg font-semibold">Token allowances</h2>
     <p className="mb-4 text-sm text-fg-muted">Refill cycles are independent of payment cycles. Yearly subscribers can receive monthly or daily tokens. Disabled preserves legacy Free/paid behavior. Enabling a policy affects existing users on their next wallet refresh.</p>
-    {q.error ? <Notice tone="danger">{q.error.message}<Button onClick={q.reload}>Retry</Button></Notice> : null}
+    {q.error ? <ErrorState title="Token allowances could not be loaded" message={q.error.message} onRetry={q.reload} /> : null}
     {q.loading ? <p>Loading token policies…</p> : null}
     <div className="space-y-2">{Object.entries(q.data?.plans ?? {}).map(([plan, p]) => <div key={plan} className="flex flex-wrap items-center justify-between gap-3 rounded-md border border-line p-3">
       <div><p className="font-medium">{labels[plan] ?? plan}</p><p className="text-sm text-fg-muted">{!p.enabled ? "Legacy behavior" : p.unlimited ? "Unlimited tokens" : `${p.amount.toLocaleString()} tokens · ${p.cycle} · carry up to ${p.rollover.toLocaleString()}`}</p></div>

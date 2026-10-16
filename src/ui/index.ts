@@ -11,3 +11,4 @@ export { Tabs, type TabDef } from "./Tabs";
 export { DataTable, type Column } from "./DataTable";
 export { ExportButton } from "./ExportButton";
 export * from "./logic";
+export { PageErrorsProvider } from "./PageErrors";

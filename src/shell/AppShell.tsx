@@ -2,6 +2,7 @@
 
 import clsx from "clsx";
 import { usePathname } from "next/navigation";
+import { PageErrorsProvider } from "@/ui/PageErrors";
 import { useEffect, useMemo, useState } from "react";
 import { useSession } from "@/lib/session";
 import { Notice, PermissionDenied } from "@/ui/States";
@@ -68,7 +69,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <PermissionDenied permission={hit?.route.permission} />
     </div>
   ) : (
-    <div className="mx-auto w-full max-w-[1440px] px-4 py-6 sm:px-6 lg:px-8">{children}</div>
+    <div className="mx-auto w-full max-w-[1440px] px-4 py-6 sm:px-6 lg:px-8"><PageErrorsProvider key={pathname}>{children}</PageErrorsProvider></div>
   );
 
   return (
