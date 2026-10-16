@@ -9,7 +9,7 @@ import RevenueAnalyticsPage from "../revenue/RevenueAnalyticsPage";
 import type { RevenueData } from "../revenue/revenueTypes";
 import { shares } from "../insights/dashboardTypes";
 import { Donut, TrendChart } from "../insights/charts";
-import { KpiRow, MiniTable, PeriodButtons, statusTone } from "../insights/widgets";
+import { compactMoney, KpiRow, MiniTable, PeriodButtons, statusTone } from "../insights/widgets";
 import { DesignPage } from "./DesignPage";
 
 interface CountryRows { countries: { country: string; revenue: number; subscribers: number; payments: number }[]; exponent: number }
@@ -19,7 +19,7 @@ export default function RevenueOverview() {
   const q = useCallable<RevenueData>("adminRevenue", { action: "summary", days, currency: "INR", page: 1, status: "all" });
   const geo = useCallable<CountryRows>("adminSubscriptionAnalytics", { action: "summary", channel: "all", country: "ALL", currency: "INR" });
   const d = q.data;
-  const fm = (v: number | null | undefined) => (v == null ? "—" : formatMinor(v, "INR"));
+  const fm = (v: number | null | undefined) => compactMoney(v);
   const plans = d ? shares(Object.entries(d.current.plans).flatMap(([id, p]) => [{ key: `${id} · monthly`, value: p.monthly }, { key: `${id} · yearly`, value: p.annual }])) : [];
   return (
     <DesignPage title="Revenue" description="Verified payments and subscription contracts." sample={DEMO_MODE}

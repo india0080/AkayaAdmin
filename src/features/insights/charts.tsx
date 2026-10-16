@@ -37,7 +37,7 @@ export function Bars({ data, height = 220, format }: { data: { label: string; va
     <div style={{ height }}>
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data}>
-          <XAxis dataKey="label" tick={tick} interval={0} />
+          <XAxis dataKey="label" tick={{ ...tick, fontSize: 10 }} interval={0} tickFormatter={(v: string) => (v.length > 9 ? `${v.slice(0, 8)}…` : v)} />
           <YAxis tick={tick} width={48} tickFormatter={format} />
           <Tooltip contentStyle={tip} formatter={(v) => (format ? format(Number(v)) : v)} cursor={{ fill: "rgb(var(--raised))" }} />
           <Bar dataKey="value" radius={4} isAnimationActive={false}>{data.map((d, i) => <Cell key={d.label} fill={SERIES_COLORS[i % SERIES_COLORS.length]} />)}</Bar>

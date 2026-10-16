@@ -70,7 +70,7 @@ const sysStatus = () => ({ checkedAt: NOW, firestore: { ok: true, latencyMs: 38 
   secrets: ["OPENROUTER_KEY", "GROQ_KEY", "SARVAM_KEY", "RAZORPAY_SECRET"].map((id) => ({ id, source: "env" })),
   providers: [["openrouter", "OpenRouter", 1840], ["groq", "Groq", 420], ["sarvam", "Sarvam", 960], ["openai", "OpenAI", null]].map(([id, name, ms]) => ({
     id, name, category: "llm", hasKey: ms !== null, status: ms === null ? "inactive" : "reachable", httpStatus: ms === null ? null : 200, latencyMs: ms,
-    history: Array.from({ length: 24 }, (_, i) => ({ at: NOW - i * 3_600_000, status: ms === null ? "inactive" : i === 7 ? "server_error" : "reachable", httpStatus: 200, latencyMs: ms })) })),
+    history: Array.from({ length: 24 }, (_, i) => ({ at: NOW - i * 3_600_000, status: ms === null ? "inactive" : i === 7 ? "server_error" : "reachable", httpStatus: 200, latencyMs: ms == null ? null : Math.round(Number(ms) * (0.8 + 0.4 * Math.abs(Math.sin(i)))) })) })),
   jobs: [{ id: "billingReconcile", lastRunAt: NOW - 600_000, lastResult: "ok", lastError: null }, { id: "renewalReminders", lastRunAt: NOW - 3_600_000, lastResult: "ok", lastError: null }] });
 
 const sysMonitor = () => ({ checkedAt: NOW,

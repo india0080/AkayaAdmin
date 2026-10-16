@@ -150,3 +150,11 @@ export function MiniTable({ head, rows, minWidth = 520 }: { head: string[]; rows
 }
 
 export const pctChange = (cur?: number | null, prev?: number | null) => (cur != null && prev ? ((cur - prev) / prev) * 100 : null);
+
+/// Compact money for KPI tiles (₹20.2L, $1.4M); full value in the title.
+export function compactMoney(minor: number | null | undefined, currency = "INR"): ReactNode {
+  if (minor == null) return "—";
+  const major = minor / 100;
+  const text = new Intl.NumberFormat(currency === "INR" ? "en-IN" : "en-US", { style: "currency", currency, notation: "compact", maximumFractionDigits: 1 }).format(major);
+  return <span title={new Intl.NumberFormat("en-IN", { style: "currency", currency }).format(major)}>{text}</span>;
+}

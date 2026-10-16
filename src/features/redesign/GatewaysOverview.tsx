@@ -4,12 +4,11 @@ import { DEMO_MODE } from "@/lib/demo/flag";
 import { usePendingCallable } from "@/lib/pending";
 import { useCallable } from "@/lib/useCallable";
 import { Badge, Panel, PendingState, Skeleton, relativeTime } from "@/ui";
-import { formatMinor } from "../pricing/logic";
 import PaymentGateways from "../revenue/PaymentGateways";
 import type { RevenueData } from "../revenue/revenueTypes";
 import type { GatewayMetrics } from "../insights/dashboardTypes";
 import { TrendChart } from "../insights/charts";
-import { KpiRow, MiniTable } from "../insights/widgets";
+import { compactMoney, KpiRow, MiniTable } from "../insights/widgets";
 import { DesignPage } from "./DesignPage";
 
 interface Gateway { id: string; version: number; enabled: boolean; mode: "test" | "live"; missing: string[]; lastWebhookAt: number | null; check: { at: number; detail: string } | null }
@@ -29,9 +28,9 @@ export default function GatewaysOverview() {
       manage={<PaymentGateways />} manageLabel="Configure keys & webhooks">
       <KpiRow items={[
         { label: "Payment success rate", value: m.data ? `${m.data.successRate.toFixed(1)}%` : "—", delta: m.data?.successDelta, hint: pendingHint },
-        { label: "Volume · 30d", value: rev.data ? formatMinor(rev.data.captured, "INR") : "—", delta: rev.data?.capturedGrowth ?? null, spark: rev.data?.series.map((s) => s.captured) },
+        { label: "Volume · 30d", value: compactMoney(rev.data?.captured), delta: rev.data?.capturedGrowth ?? null, spark: rev.data?.series.map((s) => s.captured) },
         { label: "Enabled gateways", value: st.data ? `${st.data.gateways.filter((g) => g.enabled).length}/${st.data.gateways.length}` : "—", tone: st.data?.gateways.some((g) => g.enabled && g.missing.length) ? "warning" : "success" },
-        { label: "Refunded · 30d", value: rev.data ? formatMinor(rev.data.refunded, "INR") : "—", tone: "warning" },
+        { label: "Refunded · 30d", value: compactMoney(rev.data?.refunded), tone: "warning" },
         { label: "Failed payments · 7d", value: m.data ? m.data.failed7d.toLocaleString() : "—", delta: m.data?.failedDelta, invert: true, tone: "danger", hint: pendingHint },
       ]} />
       {!st.data ? <Skeleton className="h-40" /> : (
