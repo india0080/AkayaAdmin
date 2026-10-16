@@ -6,6 +6,7 @@ import { auth } from "@/lib/firebase";
 import { AdminApiError, callAdmin } from "@/lib/api";
 import { hasPermission, type Permission } from "@/lib/permissions";
 import { resolveVerifiedAdmin } from "@/lib/sessionResolution";
+import { DEMO_MODE } from "@/lib/demo/flag";
 
 export interface AdminSession {
   uid: string;
@@ -55,6 +56,11 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
   const generation = useRef(0);
 
   useEffect(() => {
+    if (DEMO_MODE) {
+      // Dev-only sample session (never in a production build; see demo/flag.ts).
+      setState({ status: "ready", session: { uid: "demo", email: "demo@akaya.one", roles: ["super_admin"], permissions: ["*"], legacy: false, degraded: false } });
+      return;
+    }
     let deadline: ReturnType<typeof setTimeout>;
     const watch = (mine: number) => {
       clearTimeout(deadline);

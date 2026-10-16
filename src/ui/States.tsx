@@ -146,3 +146,30 @@ export function Notice({
     </div>
   );
 }
+
+/// One banner per page, however many reads failed: lists what is missing and
+/// retries all of them. Pages pass every query's error; nulls are ignored.
+export function ErrorSummary({ errors, onRetry }: { errors: { label: string; error: { message: string } | null }[]; onRetry?: () => void }) {
+  const failed = errors.filter((e) => e.error);
+  if (!failed.length) return null;
+  return (
+    <Notice
+      tone="warning"
+      title={failed.length === 1 ? `${failed[0].label} could not be loaded` : `${failed.length} sections could not be loaded`}
+      action={onRetry ? <button type="button" onClick={onRetry} className="font-medium underline">Retry all</button> : undefined}
+    >
+      {failed.length === 1 ? failed[0].error!.message : failed.map((f) => f.label).join(" · ")}
+    </Notice>
+  );
+}
+
+/// The backend for this section is not deployed yet: say so plainly, name
+/// the contract, never show invented numbers.
+export function PendingState({ title, contract, compact = true }: { title: string; contract: { callable: string; action: string; collections: string[] }; compact?: boolean }) {
+  return (
+    <StateFrame icon="clock" tone="neutral" title={title} compact={compact}>
+      Awaiting backend: <code className="rounded bg-raised px-1 font-mono text-xs">{contract.callable}({`{ action: "${contract.action}" }`})</code> over{" "}
+      {contract.collections.map((c) => <code key={c} className="mr-1 rounded bg-raised px-1 font-mono text-xs">{c}</code>)}
+    </StateFrame>
+  );
+}
