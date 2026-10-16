@@ -33,41 +33,41 @@
 [data-theme="light"] {
   color-scheme: light;
 
-  --canvas: 247 245 244;        /* #F7F5F4 app warmBg */
+  --canvas: 246 245 251;        /* #F7F5F4 app warmBg */
   --panel: 255 255 255;         /* cards, tables, dialogs */
   --sidebar: 255 255 255;       /* navigation rail (same as panel in light) */
-  --panel-2: 251 250 249;       /* table header, subtle bands */
-  --raised: 242 237 233;        /* hover / neutral selection (#F2EDE9) */
-  --line: 228 221 214;          /* #E4DDD6 */
-  --line-strong: 208 199 190;
+  --panel-2: 250 249 253;       /* table header, subtle bands */
+  --raised: 240 237 249;        /* hover / neutral selection (#F2EDE9) */
+  --line: 235 232 243;          /* #E4DDD6 */
+  --line-strong: 214 209 228;
 
-  --fg: 23 20 18;               /* near-black, warm */
-  --fg-muted: 90 86 81;         /* #5A5651 */
-  --fg-subtle: 112 106 99;      /* 4.9:1 on white */
+  --fg: 23 20 43;               /* near-black, warm */
+  --fg-muted: 84 80 106;         /* #5A5651 */
+  --fg-subtle: 102 98 125;      /* 4.9:1 on white */
 
-  --accent: 232 131 74;         /* #E8834A brand orange — marks/indicators */
-  --accent-solid: 181 86 31;    /* #B5561F filled buttons (white text 4.9:1) */
-  --accent-solid-hover: 160 74 25;
-  --accent-text: 168 79 28;     /* links / accent text on light */
-  --accent-soft: rgb(251 239 231);   /* #FBEFE7 selected background */
+  --accent: 124 92 255;         /* #7C5CFF Akaya violet — marks/indicators */
+  --accent-solid: 98 64 230;    /* #B5561F filled buttons (white text 4.9:1) */
+  --accent-solid-hover: 84 52 205;
+  --accent-text: 91 60 214;     /* links / accent text on light */
+  --accent-soft: rgb(239 234 255);   /* #FBEFE7 selected background */
   --on-accent: 255 255 255;
 
   --success: 19 121 91;   --success-soft: rgb(228 244 237);
   --warning: 158 94 0;    --warning-soft: rgb(255 243 220);
   --danger: 190 38 38;    --danger-soft: rgb(253 236 234);
   --info: 29 104 186;     --info-soft: rgb(232 241 251);
-  --neutral: 107 102 96;  --neutral-soft: rgb(240 236 232);
+  --neutral: 102 98 125;  --neutral-soft: rgb(240 236 232);
 
   --plan-free: 107 102 96;
   --plan-silver: 100 116 139;
   --plan-gold: 183 121 31;
 
-  --chart-1: 181 86 31;       /* validated: 4.9:1 on white (brand #E8834A is 2.7:1) */
+  --chart-1: 98 64 230;       /* validated: 4.9:1 on white (brand #E8834A is 2.7:1) */
   --chart-2: 29 104 186;
   --chart-3: 19 150 120;
-  --chart-4: 139 124 255;
+  --chart-4: 192 108 255;
   --chart-5: 214 158 46;
-  --chart-grid: 236 230 224;
+  --chart-grid: 238 236 245;
 
   --shadow-overlay: 0 12px 32px rgb(40 24 12 / 0.14), 0 2px 6px rgb(40 24 12 / 0.06);
   --scrim: 23 20 18;
@@ -76,24 +76,24 @@
 [data-theme="dark"] {
   color-scheme: dark;
 
-  --canvas: 10 10 10;           /* #0A0A0A app background */
-  --panel: 20 20 20;            /* #141414 app surface */
-  --sidebar: 20 20 20;          /* navigation rail (same as panel in dark) */
-  --panel-2: 16 16 16;
-  --raised: 30 30 30;           /* #1E1E1E app surfaceVariant */
-  --line: 42 42 42;             /* #2A2A2A app border */
-  --line-strong: 58 58 58;
+  --canvas: 12 11 20;           /* #0A0A0A app background */
+  --panel: 21 19 31;            /* #141414 app surface */
+  --sidebar: 16 14 25;          /* navigation rail (same as panel in dark) */
+  --panel-2: 17 15 26;
+  --raised: 30 27 45;           /* #1E1E1E app surfaceVariant */
+  --line: 38 35 56;             /* #2A2A2A app border */
+  --line-strong: 56 52 80;
 
-  --fg: 245 245 245;
-  --fg-muted: 176 176 176;      /* #B0B0B0 app textSecondary */
-  --fg-subtle: 138 138 138;     /* 5.3:1 on #141414 */
+  --fg: 241 239 250;
+  --fg-muted: 184 180 206;      /* #B0B0B0 app textSecondary */
+  --fg-subtle: 154 150 179;     /* 5.3:1 on #141414 */
 
-  --accent: 0 200 83;           /* #00C853 neon green */
-  --accent-solid: 0 200 83;
-  --accent-solid-hover: 0 176 73;
-  --accent-text: 61 220 132;
-  --accent-soft: rgb(0 200 83 / 0.1);
-  --on-accent: 4 20 10;
+  --accent: 154 128 255;           /* #9A80FF Akaya violet (dark) */
+  --accent-solid: 109 74 255;
+  --accent-solid-hover: 124 92 255;
+  --accent-text: 180 162 255;
+  --accent-soft: rgb(124 92 255 / 0.16);
+  --on-accent: 255 255 255;
 
   /* success is TEAL in dark so it never reads as the brand-green accent */
   --success: 52 198 176;  --success-soft: rgb(52 198 176 / 0.12);
@@ -106,12 +106,12 @@
   --plan-silver: 148 163 184;   /* #94A3B8 app planSilver */
   --plan-gold: 245 158 11;      /* #F59E0B app planGold */
 
-  --chart-1: 0 176 73;        /* validated: in dark lightness band, >=3:1 on #141414 */
+  --chart-1: 154 128 255;        /* validated: in dark lightness band, >=3:1 on #141414 */
   --chart-2: 94 168 255;
   --chart-3: 52 198 176;
-  --chart-4: 139 124 255;
+  --chart-4: 192 108 255;
   --chart-5: 245 176 65;
-  --chart-grid: 34 34 34;
+  --chart-grid: 34 31 49;
 
   --shadow-overlay: 0 12px 32px rgb(0 0 0 / 0.55), 0 2px 6px rgb(0 0 0 / 0.35);
   --scrim: 0 0 0;
