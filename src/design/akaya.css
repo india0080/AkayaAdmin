@@ -1,0 +1,9 @@
+/* Akaya mobile palette: warm pink-white canvas, white cards, orange controls.
+ * Scoped to Light so saved Dark/Rose preferences keep their own appearance. */
+html[data-theme="light"] .ui-panel {
+  border-radius: 20px;
+  box-shadow: 0 4px 18px rgb(40 24 12 / .035);
+}
+html[data-theme="light"] .ui-btn { border-radius: 999px; }
+html[data-theme="light"] .ui-page-title { color: rgb(var(--fg)); text-shadow: none; }
+html[data-theme="light"] .ui-panel-head { border-radius: 20px 20px 0 0; }

@@ -1,0 +1,6 @@
+.controls {display:flex;flex-wrap:wrap;gap:12px}
+.controls > input,.controls > select {width:auto;flex:1 1 160px;min-width:120px;max-width:240px}
+.cards {grid-auto-flow:row!important;grid-template-columns:repeat(4,minmax(0,1fr))!important}
+.cards > * {min-width:0}
+@media(max-width:900px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+@media(max-width:480px){.cards{grid-template-columns:minmax(0,1fr)!important}.controls > input,.controls > select{max-width:100%}}

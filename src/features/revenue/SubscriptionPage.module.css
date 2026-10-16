@@ -1,0 +1,7 @@
+.controls {display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.controls select {width:170px;flex:none}
+.controls input {width:170px;flex:none}
+.stats {display:grid!important;grid-auto-flow:row!important;grid-template-columns:repeat(3,minmax(0,1fr))!important}
+.stats :global(.ui-stat-value) {white-space:normal;overflow:visible;overflow-wrap:anywhere}
+@media(max-width:850px){.stats {grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+@media(max-width:500px){.stats {grid-template-columns:minmax(0,1fr)!important}.controls > select,.controls > input {flex:1 1 150px;max-width:100%}}

@@ -1,0 +1,12 @@
+{
+  "projects": {
+    "default": "akaya-ai"
+  },
+  "targets": {
+    "akaya-ai": {
+      "hosting": {
+        "admin": ["akaya-ai"]
+      }
+    }
+  }
+}

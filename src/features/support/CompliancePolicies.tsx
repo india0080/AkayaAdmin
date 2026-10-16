@@ -1,0 +1,37 @@
+"use client";
+import {useState} from 'react';
+import {callAdmin} from '@/lib/api';
+import {useCan} from '@/lib/session';
+import {Button,ConfirmAction,ErrorState,Field,Notice,Panel,Switch,Textarea,TextInput} from '@/ui';
+import styles from './ComplianceHub.module.css';
+export type RetentionPolicy={version:number;inactiveDays:number;retentionDays:number;anonymizeActivity:boolean;purgeMedia:boolean;enabled:boolean};
+export type Legal={revision:string;terms:string;privacy:string;termsText?:string;privacyText?:string;publishedAt?:number};
+export type PolicyReport={legal:Legal;legalVersion:number;legalDraft:{termsText:string;privacyText:string}|null;retention:RetentionPolicy;runs:{id:string;at:number;status:string;policyVersion:number;observedUsers:number;activityRemoved:number;mediaRemoved:number;failedUsers:number;partial:boolean}[]};
+const date=(at:number)=>new Date(at).toLocaleString();
+export default function CompliancePolicies({data,tab,reload}:{data:PolicyReport;tab:string;reload:()=>Promise<void>}){
+ const can=useCan(),[policy,setPolicy]=useState(data.retention),[terms,setTerms]=useState(data.legalDraft?.termsText??data.legal.termsText??''),[privacy,setPrivacy]=useState(data.legalDraft?.privacyText??data.legal.privacyText??''),[error,setError]=useState(''),[busy,setBusy]=useState(false),[confirm,setConfirm]=useState('');
+ const [preview,setPreview]=useState<{scope:string;partial:boolean;users:{uid:string;lastAt:number}[]}|null>(null);
+ async function mutate(reason:string){setBusy(true);try{await callAdmin('adminCompliance',{action:confirm,reason,...(confirm==='saveRetention'?{...policy,version:data.retention.version}:{version:data.legalVersion,termsText:terms,privacyText:privacy})});setConfirm('');await reload();}finally{setBusy(false);}}
+ async function inspect(){setBusy(true);try{setPreview(await callAdmin('adminCompliance',{action:'retentionPreview'}));setError('');}catch(e){setError((e as Error).message);}finally{setBusy(false);}}
+ return <>{error?<ErrorState message={error}/>:null}{tab==='Retention'?<>
+ <Panel title="Data Retention Policy" description={`Saved policy v${data.retention.version} · scheduled cleanup ${data.retention.enabled?'ON':'OFF'}`}>
+ <p>Expired cloud activity records can be removed to eliminate their user identifiers. Generated media cleanup deletes owned Storage objects and gallery records. Local chats, subscriptions, payment ledgers and accounts are outside this policy.</p>
+ <div className={styles.twoColumns}><Field label="Inactive after (days)">{p=><TextInput {...p} type="number" min={30} max={365} disabled={!can('config.modify')||busy} value={policy.inactiveDays} onChange={e=>setPolicy({...policy,inactiveDays:Number(e.target.value)})}/>}</Field><Field label="Cloud retention period (days)">{p=><TextInput {...p} type="number" min={90} max={730} disabled={!can('config.modify')||busy} value={policy.retentionDays} onChange={e=>setPolicy({...policy,retentionDays:Number(e.target.value)})}/>}</Field></div>
+ {[['anonymizeActivity','Remove expired cloud activity records'],['purgeMedia','Purge expired generated media'],['enabled','Enable scheduled cleanup']].map(([key,label])=><div className={styles.control} key={key}><span>{label}</span><Switch label={label} checked={policy[key as 'enabled']} disabled={busy||!can('config.modify')||(key==='enabled'&&(!can('users.erasure')||!can('config.activate')))} onChange={next=>setPolicy({...policy,[key]:next})}/></div>)}
+ <div className={styles.actions}><Button disabled={!can('config.modify')||busy} onClick={()=>setConfirm('saveRetention')}>Review & Save Policy</Button><Button disabled={busy} onClick={()=>void inspect()}>Preview Saved Policy</Button></div>
+ </Panel>
+ {preview?<Panel title={`Observed inactive accounts (${preview.users.length})`}><p>{preview.scope}</p>{preview.partial?<Notice tone="warning">Preview scan limit reached; this is not a complete account count.</Notice>:null}<div className={styles.scroll}><table><thead><tr><th>User ID</th><th>Last observed activity</th></tr></thead><tbody>{preview.users.map(u=><tr key={u.uid}><td>{u.uid}</td><td>{date(u.lastAt)}</td></tr>)}</tbody></table>{!preview.users.length?<p>No accounts with eligible recorded activity.</p>:null}</div></Panel>:null}
+ <Panel title="Scheduled Cleanup History"><div className={styles.scroll}><table><thead><tr><th>Run</th><th>Policy</th><th>Users observed</th><th>Activity removed</th><th>Media removed</th><th>Result</th></tr></thead><tbody>{data.runs.map(r=><tr key={r.id}><td>{date(r.at)}</td><td>v{r.policyVersion}</td><td>{r.observedUsers}</td><td>{r.activityRemoved}</td><td>{r.mediaRemoved}</td><td>{r.status} · {r.failedUsers} failures{r.partial?' · partial scan':''}</td></tr>)}</tbody></table>{!data.runs.length?<p>No cleanup run recorded. Cleanup stays OFF until a saved policy enables it.</p>:null}</div></Panel>
+ </>:<>
+ <Panel title="Legal Documents" description={`Published revision: ${data.legal.revision}${data.legal.publishedAt?' · '+date(data.legal.publishedAt):''}`}>
+ <p>Published text is shown inside the app. Saving a draft does not change the current document. Publishing creates an immutable revision; each user acceptance records that exact revision.</p>
+ {!data.legal.termsText?<Notice tone="info">No managed text published yet. The app still presents the existing hosted links.</Notice>:null}
+ <div className={styles.actions}><a href={data.legal.terms} target="_blank" rel="noopener noreferrer">Hosted Terms ↗</a><a href={data.legal.privacy} target="_blank" rel="noopener noreferrer">Hosted Privacy Policy ↗</a></div>
+ <Field label="Terms of Use draft">{p=><Textarea {...p} rows={12} maxLength={30000} disabled={!can('config.modify')||busy} value={terms} onChange={e=>setTerms(e.target.value)}/>}</Field>
+ <Field label="Privacy Policy draft">{p=><Textarea {...p} rows={12} maxLength={30000} disabled={!can('config.modify')||busy} value={privacy} onChange={e=>setPrivacy(e.target.value)}/>}</Field>
+ <div className={styles.actions}><Button disabled={busy||!can('config.modify')||!terms.trim()||!privacy.trim()} onClick={()=>setConfirm('saveLegal')}>Review & Save Draft</Button><Button disabled={busy||!can('config.activate')||!can('config.modify')||!data.legalDraft||terms!==data.legalDraft.termsText||privacy!==data.legalDraft.privacyText} onClick={()=>setConfirm('publishLegal')}>Publish Saved Draft</Button></div>
+ {data.legal.termsText?<details><summary>Current published documents</summary><h3>Terms</h3><pre className={styles.legalText}>{data.legal.termsText}</pre><h3>Privacy</h3><pre className={styles.legalText}>{data.legal.privacyText}</pre></details>:null}
+ </Panel></>}
+ {confirm?<ConfirmAction open title={confirm==='publishLegal'?'Publish saved legal revision':confirm==='saveLegal'?'Save legal draft':'Save retention policy'} onClose={()=>setConfirm('')} level="reason" confirmLabel="Confirm" impact={<p>{confirm==='publishLegal'?'The app will present this saved text and request explicit acceptance of the new revision.':confirm==='saveLegal'?'This saves a draft; publishing is a separate action.':`Inactive after ${policy.inactiveDays} days; retention ${policy.retentionDays} days. Activity removal ${policy.anonymizeActivity?'ON':'OFF'}, media purge ${policy.purgeMedia?'ON':'OFF'}, scheduled cleanup ${policy.enabled?'ON':'OFF'}. Enabling cleanup permits permanent removal of eligible cloud records.`}</p>} onConfirm={mutate}/>:null}
+ </>;
+}

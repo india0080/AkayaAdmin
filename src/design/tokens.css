@@ -1,0 +1,167 @@
+/*
+ * Akaya Console — design tokens.
+ *
+ * Derived from the Akaya app (akaya_ai/lib/core/theme):
+ *   LIGHT = the app's default warm theme (canvas #F7F5F4, white surfaces,
+ *           orange accent #E8834A — app_theme.dart light, insert_tokens.dart)
+ *   DARK  = the app's black + neon-green theme (#0A0A0A, #00C853).
+ *
+ * Rules for everything that consumes these:
+ *   • Never write a raw hex in a component. Use the Tailwind names mapped in
+ *     tailwind.config.ts, which resolve to these variables.
+ *   • ACCENT IS NOT STATUS. The accent marks brand + primary action +
+ *     selection. Health/result states use the status ramp and ALWAYS pair
+ *     colour with an icon and a word (StatusPill), never colour alone.
+ *   • Text colours are chosen for WCAG AA on their surface:
+ *       fg ≥ 15:1, fg-muted ≥ 7:1, fg-subtle ≥ 4.5:1,
+ *       accent-text ≥ 4.5:1, white on accent-solid (light) 4.9:1,
+ *       on-accent on accent-solid (dark) ≥ 9:1.
+ *     The raw brand orange #E8834A is only 2.6:1 on white, so it is used for
+ *     marks, indicators and focus rings — not for text or filled buttons.
+ *
+ * ROSE = a third, opt-in theme (client reference, 2026-10-08): deep navy-black
+ *   canvas, hot-pink accent, slate text. Every value was sampled from the
+ *   client's reference dashboard; text colours were re-checked for WCAG AA.
+ *   Light and Dark are unchanged.
+ *
+ * Theme selection: <html data-theme="light|dark|rose"> (set before paint by the
+ * boot script in app/layout.tsx). Any subtree can pin a theme with its own
+ * data-theme attribute — legacy pages use data-theme="dark".
+ */
+
+:root,
+[data-theme="light"] {
+  color-scheme: light;
+
+  --canvas: 247 245 244;        /* #F7F5F4 app warmBg */
+  --panel: 255 255 255;         /* cards, tables, dialogs */
+  --sidebar: 255 255 255;       /* navigation rail (same as panel in light) */
+  --panel-2: 251 250 249;       /* table header, subtle bands */
+  --raised: 242 237 233;        /* hover / neutral selection (#F2EDE9) */
+  --line: 228 221 214;          /* #E4DDD6 */
+  --line-strong: 208 199 190;
+
+  --fg: 23 20 18;               /* near-black, warm */
+  --fg-muted: 90 86 81;         /* #5A5651 */
+  --fg-subtle: 112 106 99;      /* 4.9:1 on white */
+
+  --accent: 232 131 74;         /* #E8834A brand orange — marks/indicators */
+  --accent-solid: 181 86 31;    /* #B5561F filled buttons (white text 4.9:1) */
+  --accent-solid-hover: 160 74 25;
+  --accent-text: 168 79 28;     /* links / accent text on light */
+  --accent-soft: rgb(251 239 231);   /* #FBEFE7 selected background */
+  --on-accent: 255 255 255;
+
+  --success: 19 121 91;   --success-soft: rgb(228 244 237);
+  --warning: 158 94 0;    --warning-soft: rgb(255 243 220);
+  --danger: 190 38 38;    --danger-soft: rgb(253 236 234);
+  --info: 29 104 186;     --info-soft: rgb(232 241 251);
+  --neutral: 107 102 96;  --neutral-soft: rgb(240 236 232);
+
+  --plan-free: 107 102 96;
+  --plan-silver: 100 116 139;
+  --plan-gold: 183 121 31;
+
+  --chart-1: 181 86 31;       /* validated: 4.9:1 on white (brand #E8834A is 2.7:1) */
+  --chart-2: 29 104 186;
+  --chart-3: 19 150 120;
+  --chart-4: 139 124 255;
+  --chart-5: 214 158 46;
+  --chart-grid: 236 230 224;
+
+  --shadow-overlay: 0 12px 32px rgb(40 24 12 / 0.14), 0 2px 6px rgb(40 24 12 / 0.06);
+  --scrim: 23 20 18;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --canvas: 10 10 10;           /* #0A0A0A app background */
+  --panel: 20 20 20;            /* #141414 app surface */
+  --sidebar: 20 20 20;          /* navigation rail (same as panel in dark) */
+  --panel-2: 16 16 16;
+  --raised: 30 30 30;           /* #1E1E1E app surfaceVariant */
+  --line: 42 42 42;             /* #2A2A2A app border */
+  --line-strong: 58 58 58;
+
+  --fg: 245 245 245;
+  --fg-muted: 176 176 176;      /* #B0B0B0 app textSecondary */
+  --fg-subtle: 138 138 138;     /* 5.3:1 on #141414 */
+
+  --accent: 0 200 83;           /* #00C853 neon green */
+  --accent-solid: 0 200 83;
+  --accent-solid-hover: 0 176 73;
+  --accent-text: 61 220 132;
+  --accent-soft: rgb(0 200 83 / 0.1);
+  --on-accent: 4 20 10;
+
+  /* success is TEAL in dark so it never reads as the brand-green accent */
+  --success: 52 198 176;  --success-soft: rgb(52 198 176 / 0.12);
+  --warning: 245 176 65;  --warning-soft: rgb(245 176 65 / 0.12);
+  --danger: 255 107 107;  --danger-soft: rgb(255 107 107 / 0.12);
+  --info: 94 168 255;     --info-soft: rgb(94 168 255 / 0.12);
+  --neutral: 160 160 160; --neutral-soft: rgb(160 160 160 / 0.12);
+
+  --plan-free: 160 160 160;
+  --plan-silver: 148 163 184;   /* #94A3B8 app planSilver */
+  --plan-gold: 245 158 11;      /* #F59E0B app planGold */
+
+  --chart-1: 0 176 73;        /* validated: in dark lightness band, >=3:1 on #141414 */
+  --chart-2: 94 168 255;
+  --chart-3: 52 198 176;
+  --chart-4: 139 124 255;
+  --chart-5: 245 176 65;
+  --chart-grid: 34 34 34;
+
+  --shadow-overlay: 0 12px 32px rgb(0 0 0 / 0.55), 0 2px 6px rgb(0 0 0 / 0.35);
+  --scrim: 0 0 0;
+}
+
+/*
+ * ROSE - deep navy-black + hot pink. Values sampled from the client's reference
+ * dashboard (canvas #0C0F18, sidebar #0A0D15, card #0F121C, border #1B1E27,
+ * active row #171B26, accent #FF2E74, text #F1F5F9 / #8596AD).
+ * Same variable set as light/dark (a unit test enforces it).
+ */
+[data-theme="rose"] {
+  color-scheme: dark;
+
+  --canvas: 12 15 24;           /* #0C0F18 */
+  --panel: 15 18 28;            /* #0F121C cards, tables, dialogs */
+  --panel-2: 9 11 18;           /* #090B12 table header */
+  --sidebar: 10 13 21;          /* #0A0D15 navigation rail (darker than the canvas) */
+  --raised: 23 27 38;           /* #171B26 hover / active row */
+  --line: 27 30 39;             /* #1B1E27 */
+  --line-strong: 44 49 64;      /* #2C3140 */
+
+  --fg: 241 245 249;            /* #F1F5F9 */
+  --fg-muted: 133 150 173;      /* #8596AD */
+  --fg-subtle: 118 133 156;     /* #76859C, 5:1 on the card colour */
+
+  --accent: 255 46 116;         /* #FF2E74 hot pink */
+  --accent-solid: 225 29 99;    /* #E11D63 filled buttons (white text 4.6:1) */
+  --accent-solid-hover: 200 22 86;
+  --accent-text: 255 82 140;    /* #FF528C pink text on dark, >5:1 */
+  --accent-soft: rgb(255 46 116 / 0.12);
+  --on-accent: 255 255 255;
+
+  --success: 5 223 114;   --success-soft: rgb(5 223 114 / 0.12);       /* #05DF72 */
+  --warning: 245 158 11;  --warning-soft: rgb(245 158 11 / 0.12);      /* #F59E0B */
+  --danger: 248 113 113;  --danger-soft: rgb(248 113 113 / 0.12);      /* #F87171 */
+  --info: 6 182 212;      --info-soft: rgb(6 182 212 / 0.12);          /* #06B6D4 cyan */
+  --neutral: 148 163 184; --neutral-soft: rgb(148 163 184 / 0.12);
+
+  --plan-free: 148 163 184;
+  --plan-silver: 203 213 225;
+  --plan-gold: 245 158 11;
+
+  --chart-1: 255 46 116;      /* pink */
+  --chart-2: 6 182 212;       /* cyan */
+  --chart-3: 16 179 125;      /* green #10B37D */
+  --chart-4: 155 80 220;      /* purple */
+  --chart-5: 245 158 11;      /* amber */
+  --chart-grid: 27 30 39;
+
+  --shadow-overlay: 0 12px 32px rgb(0 0 0 / 0.6), 0 2px 6px rgb(0 0 0 / 0.4);
+  --scrim: 0 0 0;
+}

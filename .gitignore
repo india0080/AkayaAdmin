@@ -1,0 +1,33 @@
+# dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Next.js
+.next/
+out/
+
+# compiled unit tests (npm test)
+.test-build/
+
+# env — NEVER commit real credentials
+.env.local
+.env.*.local
+
+# debug
+npm-debug.log*
+
+# misc
+.DS_Store
+*.pem
+
+# TypeScript incremental cache
+tsconfig.tsbuildinfo
+
+# Isolated local gateway verification outputs
+.gwn/
+.gwd/
+
+.next-*/
+.claude/
+.codex/
