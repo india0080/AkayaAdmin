@@ -104,4 +104,10 @@ export const PAGE_FIXTURES: Record<string, Fixture> = {
   "adminInsights:activity": (d) => { const days = Number(d.days ?? 30); return { generatedAt: NOW, series: Array.from({ length: days }, (_, i) => ({ day: iso(days - 1 - i), total: wave(i, 1150, 180), guests: wave(i, 90, 20) })), mix: { total: 128_450, guests: 9120, silver: 0, gold: 0 } }; },
   "adminInsights:funnel": () => ({ steps: [{ label: "Installed & opened", count: 128_450, rate: 100 }, { label: "Signed in", count: 119_330, rate: 92.9 }, { label: "First AI chat", count: 96_110, rate: 74.8 }, { label: "Paid", count: 4548, rate: 3.5 }], conversion: 3.5, incomplete: false, note: "Sample cohort." }),
   "adminAuditLog": () => ({ entries: [] }),
+  "adminConfig:get": (d) => ({ target: d.target, snapshot: { recurring: { enabled: true, graceDays: 3 } }, version: 7, updatedAt: NOW - 3 * DAY, updatedByEmail: "demo@akaya.one" }),
+  "adminBilling:recurringPlans": () => ({ razorpayPlans: [{ key: "appPremium_monthly", productId: "appPremium", currency: "INR", amount: 49_900, priceVersion: 3, rzpPlanId: "plan_DEMO1", createdAt: NOW - 30 * DAY }],
+    products: plans().plans.map((p) => ({ id: p.id, priceMonthly: p.priceMonthly, priceAnnual: p.priceAnnual, isActive: true })) }),
+  "adminTokenPolicies:read": () => ({ version: 2, plans: {
+    free: { enabled: true, unlimited: false, amount: 2000, cycle: "daily", rollover: 0 }, app_premium: { enabled: true, unlimited: false, amount: 400_000, cycle: "monthly", rollover: 20 },
+    all_access: { enabled: true, unlimited: true, amount: 0, cycle: "monthly", rollover: 0 } } }),
 };

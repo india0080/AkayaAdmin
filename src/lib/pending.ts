@@ -35,6 +35,18 @@ export const PENDING = {
     summary: "90-day challenge participants, verified/paid referrals, milestones and gift claims." },
   affiliates: { callable: "adminAffiliate", action: "list", collections: ["affiliates", "affiliate_payouts"],
     summary: "Affiliate partners, attributed sign-ups, commission and KYC/TDS status." },
+  notificationEngagement: { callable: "adminComms", action: "engagement", collections: ["push_events"],
+    summary: "Opens, clicks and opt-outs per campaign (needs app-side open/click events)." },
+  subscriptionFlows: { callable: "adminBilling", action: "flows", collections: ["subscriptions", "subscription_events"],
+    summary: "New subscriptions and trials per day." },
+  planEntitlements: { callable: "adminBilling", action: "entitlements", collections: ["subscription_plans"],
+    summary: "Feature limits per plan as enforced by the app." },
+  gatewayMetrics: { callable: "adminPaymentGateways", action: "metrics", collections: ["payments", "payment_attempts"],
+    summary: "Success rate, fees, volume and failed attempts per gateway per day." },
+  serviceMetrics: { callable: "adminSystemMonitor", action: "errorRate", collections: ["api_call_rollups"],
+    summary: "Server error rate across admin + app functions." },
+  engagement: { callable: "adminInsights", action: "engagement", collections: ["analytics_daily", "feature_events"],
+    summary: "Weekly actives and feature usage counts." },
 } satisfies Record<string, PendingContract>;
 
 export type PendingKey = keyof typeof PENDING;

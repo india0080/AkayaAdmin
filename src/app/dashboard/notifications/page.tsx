@@ -1,4 +1,4 @@
-import Page_ from "@/features/comms/PushPage";
+import Page_ from "@/features/redesign/NotificationsOverview";
 
 export default function Page() {
   return <Page_ />;

@@ -46,3 +46,28 @@ export const weekNet = (w: PnlWeek) => w.revenue - w.aiCost - w.serverCost - w.g
 export function topConsumer(rows: ApiIntegration[]): ApiIntegration | null {
   return rows.reduce<ApiIntegration | null>((best, r) => (!best || r.calls24h > best.calls24h ? r : best), null);
 }
+
+// ── Pending contracts used by the redesigned pages ─────────────────────────
+export interface NotificationEngagement { openRate: number; ctr: number; optOutRate: number; deltas: { openRate: number; ctr: number; optOutRate: number } }
+export interface SubscriptionFlows { new7d: number; trials: number; newDelta: number; trialDelta: number; daily: number[] }
+export interface PlanEntitlements { plans: string[]; features: { feature: string; values: string[] }[] }
+export interface GatewayMetrics {
+  successRate: number; failed7d: number; successDelta: number; failedDelta: number;
+  gateways: { id: string; successRate: number; feePct: number }[];
+  daily: { day: string; razorpay: number; stripe: number; play: number }[];
+}
+export interface ServiceMetrics { errorRatePct: number; errorDelta: number }
+export interface Engagement { wau: number; wauDelta: number; features: { label: string; value: number }[] }
+
+/// Uptime % over probe history (reachable / all non-inactive probes).
+export function uptimePct(history: { status: string }[]): number | null {
+  const live = history.filter((h) => h.status !== "inactive");
+  return live.length ? (live.filter((h) => h.status === "reachable").length / live.length) * 100 : null;
+}
+
+/// p95 of a numeric list (nearest-rank); null when empty.
+export function p95(values: number[]): number | null {
+  if (!values.length) return null;
+  const s = [...values].sort((a, b) => a - b);
+  return s[Math.min(s.length - 1, Math.ceil(0.95 * s.length) - 1)];
+}

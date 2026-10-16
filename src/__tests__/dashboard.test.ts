@@ -44,3 +44,11 @@ test("every pending contract names a callable and collections", () => {
   }
   assert.ok(NAV.some((g) => g.routes.some((r) => r.href === "/dashboard/referral")));
 });
+
+test("uptime and p95 helpers", async () => {
+  const { uptimePct, p95 } = await import("../features/insights/dashboardTypes");
+  assert.equal(uptimePct([{ status: "reachable" }, { status: "server_error" }, { status: "inactive" }]), 50);
+  assert.equal(uptimePct([]), null);
+  assert.equal(p95([1, 2, 3, 4, 100]), 100);
+  assert.equal(p95([]), null);
+});

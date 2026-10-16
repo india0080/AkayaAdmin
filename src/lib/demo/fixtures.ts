@@ -74,6 +74,16 @@ const weeks = Array.from({ length: 12 }, (_, i) => {
 weeks[2].aiCost = weeks[2].revenue; // one loss week, so the red state is visible
 
 const PENDING_FIXTURES: Record<PendingKey, unknown> = {
+  notificationEngagement: { openRate: 18.6, ctr: 6.2, optOutRate: 0.4, deltas: { openRate: 1.4, ctr: 0.8, optOutRate: -0.1 } },
+  subscriptionFlows: { new7d: 3912, trials: 6280, newDelta: 8.1, trialDelta: 4.4, daily: Array.from({ length: 14 }, () => int(420, 640)) },
+  planEntitlements: { plans: ["free", "appPremium", "floatingPremium", "allAccess"], features: [
+    ["AI chat messages / day", "20", "Unlimited", "50", "Unlimited"], ["Floating bubble", "—", "—", "✓", "✓"], ["Voice minutes / mo", "—", "300", "600", "Unlimited"],
+    ["WhatsApp reminders", "—", "✓", "—", "✓"], ["Offline models", "1", "All", "All", "All"], ["App control agent", "—", "—", "✓", "✓"]].map(([feature, ...values]) => ({ feature, values })) },
+  gatewayMetrics: { successRate: 96.4, failed7d: 1284, successDelta: 0.8, failedDelta: -3.1,
+    gateways: [{ id: "razorpay", successRate: 97.8, feePct: 2.0 }, { id: "stripe", successRate: 95.1, feePct: 2.9 }, { id: "play", successRate: 93.4, feePct: 15 }],
+    daily: Array.from({ length: 14 }, (_, i) => ({ day: day(13 - i), razorpay: 96 + rnd() * 3, stripe: 93 + rnd() * 4, play: 91 + rnd() * 4 })) },
+  serviceMetrics: { errorRatePct: 0.21, errorDelta: -0.05 },
+  engagement: { wau: 41_380, wauDelta: 3.2, features: [["Chat", 15_200], ["Floating", 9_800], ["Voice", 7_400], ["Reminders", 5_100], ["App control", 3_300], ["Offline", 2_900]].map(([label, value]) => ({ label, value })) },
   downloads: { platforms: [{ platform: "android", downloads: 812_430, delta7dPct: 6.2 }, { platform: "ios", downloads: 296_118, delta7dPct: 4.1 },
     { platform: "macos", downloads: 48_906, delta7dPct: 11.8 }, { platform: "windows", downloads: 37_552, delta7dPct: -1.3 }] },
   platformUsers: { total: 128_450, byPlatform: { android: 83_120, ios: 31_870, macos: 7_640, windows: 5_820 } },
