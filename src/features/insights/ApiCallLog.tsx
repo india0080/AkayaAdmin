@@ -22,9 +22,9 @@ export function IntegrationsTable({ data }: { data: Log }) {
               <td className="px-3 py-2 font-medium">{r.name} {r.id === top?.id ? <Badge tone="accent">Top consumer</Badge> : null}</td>
               <td className="px-3 py-2 tabular-nums">{formatNumber(r.calls24h)}</td>
               <td className="px-3 py-2"><Sparkline values={r.trend} className="h-6 w-20" /></td>
-              <td className={clsx("px-3 py-2 tabular-nums", r.errorRate >= 1 ? "text-danger" : "text-fg-muted")}>{r.errorRate.toFixed(1)}%</td>
+              <td className={clsx("px-3 py-2 tabular-nums", r.errorRate >= 1 ? "font-semibold text-danger" : r.errorRate >= 0.5 ? "text-warning" : "text-success")}>{r.errorRate.toFixed(1)}%</td>
               <td className="px-3 py-2 tabular-nums text-fg-muted">{r.p95Ms == null ? "—" : `${formatNumber(r.p95Ms)} ms`}</td>
-              <td className="px-3 py-2">{r.quotaPct == null ? <span className="text-fg-subtle">—</span> : <span className={clsx("tabular-nums", r.quotaPct >= 70 ? "text-warning" : "text-fg-muted")}>{r.quotaPct}%</span>}</td>
+              <td className="px-3 py-2">{r.quotaPct == null ? <span className="text-fg-subtle">—</span> : <span className={clsx("tabular-nums", r.quotaPct >= 90 ? "font-semibold text-danger" : r.quotaPct >= 70 ? "text-warning" : "text-success")}>{r.quotaPct}%</span>}</td>
             </tr>
           ))}
         </tbody>
@@ -38,7 +38,7 @@ export function RecentCalls({ data, limit = 8 }: { data: Log; limit?: number }) 
     <ul className="divide-y divide-line text-sm">
       {data.recent.slice(0, limit).map((c) => (
         <li key={`${c.at}-${c.endpoint}`} className="flex items-center gap-3 py-2">
-          <span className={clsx("w-10 shrink-0 rounded px-1 text-center font-mono text-xs", c.status >= 400 ? "bg-danger-soft text-danger" : "bg-success-soft text-success")}>{c.status}</span>
+          <span className={clsx("w-10 shrink-0 rounded px-1 text-center font-mono text-xs", c.status === 429 ? "bg-warning-soft text-warning" : c.status >= 400 ? "bg-danger-soft text-danger" : "bg-success-soft text-success")}>{c.status}</span>
           <span className="min-w-0 flex-1 truncate"><span className="font-medium">{c.integration}</span> <span className="font-mono text-xs text-fg-muted">{c.endpoint}</span></span>
           <span className="shrink-0 text-xs tabular-nums text-fg-subtle">{formatNumber(c.latencyMs)} ms · {relativeTime(c.at)}</span>
         </li>

@@ -36,3 +36,7 @@ html:not([data-theme="rose"]) .ui-statstrip > .ui-stat::before {
 }
 html:not([data-theme="rose"]) .ui-stat-value { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.01em; white-space: normal; }
 html:not([data-theme="rose"]) .ui-stat-hint { white-space: normal; }
+
+html:not([data-theme="rose"]) .ui-statstrip > .ui-stat:has(.text-success)::before { background: rgb(var(--success)); }
+html:not([data-theme="rose"]) .ui-statstrip > .ui-stat:has(.text-danger)::before { background: rgb(var(--danger)); }
+html:not([data-theme="rose"]) .ui-statstrip > .ui-stat:has(.text-warning)::before { background: rgb(var(--warning)); }

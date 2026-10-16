@@ -47,7 +47,7 @@ export function ProfitLossCard() {
   const q = useProfitLoss();
   const t = q.data ? pnlTotals(q.data.weeks) : null;
   return (
-    <Panel title="Profit / Loss" description="Last 12 weeks · revenue minus all costs" actions={q.data ? <SampleTag /> : null}>
+    <Panel title="Profit / Loss" description="Last 12 weeks · revenue minus all costs" actions={<>{t ? <span className={clsx("rounded-full px-2 py-0.5 text-xs font-semibold", t.net < 0 ? "bg-danger-soft text-danger" : "bg-success-soft text-success")}>{t.net < 0 ? "▼ Net loss" : "▲ Net profit"}</span> : null}{q.data ? <SampleTag /> : null}</>}>
       {q.pending ? <PendingState title="Profit & loss is not tracked yet" contract={q.contract} /> : !q.data || !t ? <Skeleton className="h-48 w-full" /> : (
         <div className="grid gap-4 md:grid-cols-2">
           <div>

@@ -36,7 +36,7 @@ const STATUS: Record<Status, { tone: Tone; icon: string; label: string }> = {
   degraded: { tone: "warning", icon: "alert-triangle", label: "Degraded" },
   down: { tone: "danger", icon: "x-circle", label: "Down" },
   unknown: { tone: "neutral", icon: "info", label: "Unknown" },
-  pending: { tone: "info", icon: "clock", label: "Pending" },
+  pending: { tone: "warning", icon: "clock", label: "Pending" },
   off: { tone: "neutral", icon: "minus-circle", label: "Off" },
 };
 

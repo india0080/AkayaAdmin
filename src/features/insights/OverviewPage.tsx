@@ -76,7 +76,7 @@ export default function OverviewPage() {
         {downloads.pending ? <div className="ui-panel rounded-xl border border-line bg-panel sm:col-span-2 xl:col-span-4"><PendingState title="Downloads per platform are not tracked yet" contract={downloads.contract} /></div>
           : PLATFORMS.map((p) => {
             const row = downloads.data?.platforms.find((x) => x.platform === p.id);
-            return <KpiCard key={p.id} label={`${p.label} downloads`} icon={p.icon} color={p.color} value={n(row?.downloads)} footer={<Delta pct={row?.delta7dPct} />} />;
+            return <KpiCard key={p.id} label={`${p.label} downloads`} icon={p.icon} color={p.color} value={n(row?.downloads)} tone={row?.delta7dPct == null ? undefined : row.delta7dPct >= 0 ? "success" : "danger"} footer={<Delta pct={row?.delta7dPct} />} />;
           })}
       </section>
 
@@ -84,9 +84,9 @@ export default function OverviewPage() {
         <KpiCard highlight label="Total users · all platforms" value={n(d?.users.total)}
           footer={platformUsers.data ? <ShareBar rows={shares(PLATFORMS.map((p) => ({ key: p.label, value: platformUsers.data!.byPlatform[p.id] }))).map((s, i) => ({ label: s.key, pct: s.pct, color: ["#34d399", "#93c5fd", "#e5e7eb", "#38bdf8"][i] }))} />
             : <span className="text-xs">{n(d?.users.guests)} guests included</span>} />
-        <KpiCard label="Daily active users" value={canTraffic ? n(last?.dau) : "—"} footer={<Delta pct={pct(last?.dau, prev?.dau)} />} spark={t?.series.map((s) => s.dau ?? 0)} />
+        <KpiCard tone={(pct(last?.dau, prev?.dau) ?? 0) >= 0 ? "success" : "danger"} label="Daily active users" value={canTraffic ? n(last?.dau) : "—"} footer={<Delta pct={pct(last?.dau, prev?.dau)} />} spark={t?.series.map((s) => s.dau ?? 0)} />
         <KpiCard label="Monthly active" value={canTraffic ? n(last?.mau) : "—"} footer={<Delta pct={pct(last?.mau, prev?.mau)} />} spark={t?.series.map((s) => s.mau ?? 0)} />
-        <KpiCard label="Revenue · last 30d" value={b ? formatMinor(b.actual.last30CapturedPaise, "INR") : "—"}
+        <KpiCard tone="success" label="Revenue · last 30d" value={b ? formatMinor(b.actual.last30CapturedPaise, "INR") : "—"}
           footer={<span className="text-xs text-fg-muted">{b ? `${n(b.actual.last30Payments)} captured payments` : canBilling ? "Loading…" : "Billing access required"}</span>}
           spark={b?.actual.daily.map((x) => x.captured)} />
         <KpiCard label="New sign-ups today" value={n(signupsToday)} footer={<span className="text-xs text-fg-muted">{n(d?.users.new7d)} in the last 7 days</span>} spark={signupSpark} />

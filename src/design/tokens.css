@@ -52,8 +52,8 @@
   --accent-soft: rgb(239 234 255);   /* #FBEFE7 selected background */
   --on-accent: 255 255 255;
 
-  --success: 19 121 91;   --success-soft: rgb(228 244 237);
-  --warning: 158 94 0;    --warning-soft: rgb(255 243 220);
+  --success: 21 128 61;   --success-soft: rgb(226 246 233);
+  --warning: 161 98 7;    --warning-soft: rgb(254 243 199);
   --danger: 190 38 38;    --danger-soft: rgb(253 236 234);
   --info: 29 104 186;     --info-soft: rgb(232 241 251);
   --neutral: 102 98 125;  --neutral-soft: rgb(240 236 232);
@@ -95,10 +95,10 @@
   --accent-soft: rgb(124 92 255 / 0.16);
   --on-accent: 255 255 255;
 
-  /* success is TEAL in dark so it never reads as the brand-green accent */
-  --success: 52 198 176;  --success-soft: rgb(52 198 176 / 0.12);
-  --warning: 245 176 65;  --warning-soft: rgb(245 176 65 / 0.12);
-  --danger: 255 107 107;  --danger-soft: rgb(255 107 107 / 0.12);
+  /* semantic: green = profit/healthy/up, red = loss/error/down, amber = warning/pending */
+  --success: 74 222 128;  --success-soft: rgb(74 222 128 / 0.12);
+  --warning: 251 191 36;  --warning-soft: rgb(251 191 36 / 0.12);
+  --danger: 248 113 113;  --danger-soft: rgb(248 113 113 / 0.12);
   --info: 94 168 255;     --info-soft: rgb(94 168 255 / 0.12);
   --neutral: 160 160 160; --neutral-soft: rgb(160 160 160 / 0.12);
 
