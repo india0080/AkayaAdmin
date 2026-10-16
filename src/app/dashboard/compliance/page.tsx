@@ -1,5 +1,5 @@
-import ComplianceHub from "@/features/support/ComplianceHub";
+import Page_ from "@/features/growth/AffiliateCompliancePage";
 
 export default function Page() {
-  return <ComplianceHub />;
+  return <Page_ />;
 }

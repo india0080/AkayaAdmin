@@ -3,6 +3,7 @@
 import clsx from "clsx";
 import type { ReactNode } from "react";
 import { Icon } from "./Icon";
+import { useReportPageError } from "./PageErrors";
 
 export function Spinner({ size = 16, className }: { size?: number; className?: string }) {
   return (
@@ -68,6 +69,16 @@ export function ErrorState({
   onRetry?: () => void;
   compact?: boolean;
 }) {
+  // Inside the console shell the page banner shows the message once; here we
+  // keep only a small placeholder so the layout still says what is missing.
+  const banner = useReportPageError({ title, message, onRetry });
+  if (banner) {
+    return (
+      <div role="status" className="flex items-center gap-2 rounded-lg border border-dashed border-line px-3 py-3 text-sm text-fg-muted">
+        <Icon name="alert-triangle" size={16} className="text-warning" /> {title} — see the notice above.
+      </div>
+    );
+  }
   return (
     <div role="alert">
       <StateFrame
@@ -144,5 +155,26 @@ export function Notice({
       </div>
       {action ? <div className="shrink-0">{action}</div> : null}
     </div>
+  );
+}
+
+/// One banner per page, however many reads failed: lists what is missing and
+/// retries all of them. Pages pass every query's error; nulls are ignored.
+export function ErrorSummary({ errors, onRetry }: { errors: { label: string; error: { message: string } | null }[]; onRetry?: () => void }) {
+  return <>{errors.map((e) => e.error ? <SummaryItem key={e.label} label={e.label} message={e.error.message} onRetry={onRetry} /> : null)}</>;
+}
+function SummaryItem({ label, message, onRetry }: { label: string; message: string; onRetry?: () => void }) {
+  const banner = useReportPageError({ title: `${label} could not be loaded`, message, onRetry });
+  return banner ? null : <Notice tone="warning" title={`${label} could not be loaded`}>{message}</Notice>;
+}
+
+/// The backend for this section is not deployed yet: say so plainly, name
+/// the contract, never show invented numbers.
+export function PendingState({ title, contract, compact = true }: { title: string; contract: { callable: string; action: string; collections: string[] }; compact?: boolean }) {
+  return (
+    <StateFrame icon="clock" tone="neutral" title={title} compact={compact}>
+      Awaiting backend: <code className="rounded bg-raised px-1 font-mono text-xs">{contract.callable}({`{ action: "${contract.action}" }`})</code> over{" "}
+      {contract.collections.map((c) => <code key={c} className="mr-1 rounded bg-raised px-1 font-mono text-xs">{c}</code>)}
+    </StateFrame>
   );
 }

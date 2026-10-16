@@ -1,40 +1,22 @@
-import mark from "@/design/brand/akaya-mark.png";
+import bubble from "@/design/brand/akaya-bubble.png";
 
-/// The Akaya mark (akaya_ai/assets/images/akayalogo.png) rendered as a mask
-/// so it takes `currentColor` — correct in both themes without a second asset.
+/// The Akaya pearl bubble, full colour, identical in every theme (the
+/// brand asset is never tinted).
 export function BrandMark({ size = 24, className }: { size?: number; className?: string }) {
   return (
-    <span
-      aria-hidden
-      className={className}
-      style={{
-        display: "inline-block",
-        width: size,
-        height: size,
-        backgroundColor: "currentColor",
-        WebkitMaskImage: `url(${mark.src})`,
-        maskImage: `url(${mark.src})`,
-        WebkitMaskSize: "contain",
-        maskSize: "contain",
-        WebkitMaskRepeat: "no-repeat",
-        maskRepeat: "no-repeat",
-        WebkitMaskPosition: "center",
-        maskPosition: "center",
-      }}
-    />
+    // eslint-disable-next-line @next/next/no-img-element -- static export, no image optimiser
+    <img src={bubble.src} width={size} height={size} alt="" aria-hidden className={className} draggable={false} />
   );
 }
 
 export function BrandLockup({ collapsed }: { collapsed?: boolean }) {
   return (
     <span className="flex items-center gap-2.5">
-      <span className="ui-brand-chip flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-accent-soft text-accent">
-        <BrandMark size={20} />
-      </span>
+      <BrandMark size={32} className="shrink-0 rounded-full" />
       {!collapsed ? (
         <span className="leading-tight">
           <span className="ui-brand-name block text-sm font-bold tracking-tight text-fg">Akaya</span>
-          <span className="block text-2xs font-medium uppercase tracking-[0.12em] text-fg-subtle">Console</span>
+          <span className="block text-2xs font-medium uppercase tracking-[0.12em] text-fg-subtle">Admin Console</span>
         </span>
       ) : null}
     </span>

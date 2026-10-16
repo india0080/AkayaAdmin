@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useCallable } from "@/lib/useCallable";
 import { DataTable, ErrorState, Notice, PageHeader, Panel, Select, Skeleton, Stat, StatStrip, formatNumber } from "@/ui";
 import { DailyBars } from "./DailyBars";
-import TrafficPage from "./TrafficPage";
 import ActivityMonitor from "./ActivityMonitor";
 
 interface Activity {
@@ -14,7 +13,7 @@ interface Activity {
 }
 
 export default function ActivityPage() {
-  return <ActivityMonitor><TrafficPage><AcquisitionSnapshot /></TrafficPage></ActivityMonitor>;
+  return <ActivityMonitor><AcquisitionSnapshot /></ActivityMonitor>;
 }
 
 function AcquisitionSnapshot() {

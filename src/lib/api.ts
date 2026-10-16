@@ -2,7 +2,8 @@
 
 import { httpsCallable } from "firebase/functions";
 import { fns } from "@/lib/firebase";
-import { normaliseError } from "@/lib/apiErrors";
+import { AdminApiError, normaliseError } from "@/lib/apiErrors";
+import { DEMO_MODE } from "@/lib/demo/flag";
 
 export { AdminApiError, normaliseError } from "@/lib/apiErrors";
 export type { ApiErrorKind } from "@/lib/apiErrors";
@@ -14,6 +15,13 @@ export async function callAdmin<TRes = unknown, TReq = Record<string, unknown>>(
   name: string,
   data?: TReq,
 ): Promise<TRes> {
+  // Inline NODE_ENV check lets the minifier drop the fixtures chunk from production builds.
+  if (process.env.NODE_ENV !== "production" && DEMO_MODE) {
+    const { realFixture } = await import("@/lib/demo/fixtures");
+    const res = realFixture(name, data as Record<string, unknown> | undefined);
+    if (res === undefined) throw new AdminApiError("unavailable", "demo", `Demo mode: no sample data for ${name}.`);
+    return res as TRes;
+  }
   try {
     const res = await httpsCallable<TReq, TRes>(fns, name)(data as TReq);
     return res.data;

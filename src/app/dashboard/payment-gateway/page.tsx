@@ -1,2 +1,5 @@
-import PaymentGateways from "@/features/revenue/PaymentGateways";
-export default function Page() { return <PaymentGateways />; }
+import Page_ from "@/features/redesign/GatewaysOverview";
+
+export default function Page() {
+  return <Page_ />;
+}

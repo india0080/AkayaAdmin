@@ -12,7 +12,7 @@ import { findRoute, type NavGroup } from "./nav";
 const OPEN_KEY = "akaya-console-nav-open";
 
 /// Grouped navigation: domain groups collapse, the active group opens, so the
-/// sidebar never becomes a 40-item wall. Which groups are open is a
+/// sidebar never becomes a 40-item wall (accordion: one group open). Which groups are open is a
 /// per-operator convenience (localStorage).
 export function Sidebar({
   groups,
@@ -37,7 +37,11 @@ export function Sidebar({
 
   function toggle(id: string) {
     setOpen((o) => {
-      const next = { ...o, [id]: !(o[id] ?? id === active?.group.id) };
+      // Accordion: opening a group closes the others, so the rail always fits
+      // a 900px-tall window without scrolling.
+      const wasOpen = o[id] ?? id === active?.group.id;
+      const next: Record<string, boolean> = Object.fromEntries(groups.map((g) => [g.id, false]));
+      next[id] = !wasOpen;
       try {
         localStorage.setItem(OPEN_KEY, JSON.stringify(next));
       } catch {
@@ -54,7 +58,7 @@ export function Sidebar({
           <BrandLockup collapsed={collapsed} />
         </Link>
       </div>
-      <div className="flex-1 overflow-y-auto px-2 py-3">
+      <div className="flex-1 overflow-y-auto px-2 py-2">
         <ul className="space-y-0.5">
           {groups.map((g) => {
             const isActiveGroup = active?.group.id === g.id;
