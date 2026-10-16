@@ -46,7 +46,7 @@ test("provider labels", () => {
 
 test("the User 360 route belongs to User Directory (breadcrumb + permission)", () => {
   const hit = findRoute("/dashboard/users/view");
-  assert.equal(hit?.route.label, "User Directory");
+  assert.equal(hit?.route.label, "Users");
   assert.equal(hit?.route.permission, "users.read");
   assert.equal(findRoute("/dashboard/erasure")?.route.permission, "users.erasure");
 });

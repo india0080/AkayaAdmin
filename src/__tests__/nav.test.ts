@@ -46,7 +46,7 @@ test("support sees customers and support, not AI configuration", () => {
   assert.ok(ids.includes("customers"));
   assert.ok(ids.includes("support"));
   assert.ok(!ids.includes("ai"));
-  assert.ok(!ids.includes("voice"));
+  assert.ok(!ids.includes("product"));
 });
 
 test("a role with no permissions sees nothing", () => {
@@ -54,9 +54,9 @@ test("a role with no permissions sees nothing", () => {
 });
 
 test("findRoute: exact, basePath-prefixed, trailing slash and nested paths", () => {
-  assert.equal(findRoute("/dashboard/users")?.route.label, "User Directory");
-  assert.equal(findRoute("/Admin/dashboard/users/")?.route.label, "User Directory");
-  assert.equal(findRoute("/dashboard/users/detail")?.route.label, "User Directory");
+  assert.equal(findRoute("/dashboard/users")?.route.label, "Users");
+  assert.equal(findRoute("/Admin/dashboard/users/")?.route.label, "Users");
+  assert.equal(findRoute("/dashboard/users/detail")?.route.label, "Users");
   assert.equal(findRoute("/dashboard")?.route.label, "Overview");
   // "/dashboard" must not swallow unknown children.
   assert.equal(findRoute("/dashboard/unknown-page"), null);
@@ -65,7 +65,7 @@ test("findRoute: exact, basePath-prefixed, trailing slash and nested paths", () 
 test("breadcrumbs name the group then the page", () => {
   assert.deepEqual(
     breadcrumbs("/dashboard/floating-system").map((c) => c.label),
-    ["Voice & Floating", "Floating Control Plane"],
+    ["More", "Floating Control Plane"],
   );
   assert.deepEqual(breadcrumbs("/nowhere"), [{ label: "Console" }]);
 });
@@ -75,7 +75,7 @@ test("command palette search: every word must match; label hits rank first", () 
   const hits = searchNav("float", nav).map((h) => h.route.label);
   assert.ok(hits.length >= 2);
   assert.ok(hits[0].toLowerCase().startsWith("float"));
-  assert.deepEqual(searchNav("mrr", nav).map((h) => h.route.label), ["Revenue Insights"]);
+  assert.deepEqual(searchNav("mrr", nav).map((h) => h.route.label), ["Revenue"]);
   assert.deepEqual(searchNav("zzzz nothing", nav), []);
   // Keywords count: "gemma" finds the on-device catalog.
   assert.equal(searchNav("gemma", nav)[0]?.route.label, "On-device Models");
@@ -88,12 +88,19 @@ test("search never returns a route the admin cannot see", () => {
 
 test("Support tickets page is in the support group, gated by support.read", () => {
   const r = findRoute("/dashboard/tickets");
-  assert.equal(r?.route.label, "Support");
+  assert.equal(r?.route.label, "Support Tickets");
   assert.equal(r?.route.permission, "support.read");
   assert.equal(r?.group.id, "support");
   const readOnly = visibleNav(canWith(["support.read"])).flatMap((g) => g.routes.map((x) => x.href));
   assert.ok(readOnly.includes("/dashboard/tickets"));
   const none = visibleNav(canWith(["dashboard.read"])).flatMap((g) => g.routes.map((x) => x.href));
   assert.ok(!none.includes("/dashboard/tickets"));
-  assert.deepEqual(searchNav("helpdesk", visibleNav(canWith(["support.read"]))).map((h) => h.route.label), ["Support"]);
+  assert.deepEqual(searchNav("helpdesk", visibleNav(canWith(["support.read"]))).map((h) => h.route.label), ["Support Tickets"]);
+});
+
+test("approved sidebar: eight domain groups in order, then More", () => {
+  assert.deepEqual(NAV.map((g) => g.label), [
+    "Command Center", "Customers", "Revenue", "Growth", "AI Platform", "Product", "Support & Trust", "System", "More",
+  ]);
+  assert.deepEqual(NAV[0].routes.map((r) => r.label), ["Overview", "Traffic", "Activity"]);
 });

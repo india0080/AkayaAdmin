@@ -190,11 +190,11 @@ test("permission gating: view = config.read, edit = config.modify", () => {
   assert.deepEqual(futureAccess(can(["config.*"])), { canView: true, canEdit: true });
 });
 
-test("nav: Future entry under Product Config gated by config.read", () => {
+test("nav: Future entry under More gated by config.read", () => {
   const hit = findRoute("/dashboard/future");
   assert.ok(hit);
   assert.equal(hit.route.label, "Future");
-  assert.equal(hit.group.id, "config");
+  assert.equal(hit.group.id, "more");
   assert.ok((PERMISSIONS as readonly string[]).includes(hit.route.permission));
   assert.equal(hit.route.permission, "config.read");
   const labels = (g: string[]) => visibleNav((p) => hasPermission(g, p)).flatMap((x) => x.routes.map((r) => r.label));
