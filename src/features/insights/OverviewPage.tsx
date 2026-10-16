@@ -11,6 +11,7 @@ import { formatMinor } from "../pricing/logic";
 import type { BillingSummary } from "../revenue/types";
 import { ProfitLossCard } from "../revenue/ProfitLossCard";
 import { ApiCallLogPanel } from "./ApiCallLog";
+import { FunnelPlanCards } from "./FunnelPlanCards";
 import { PLATFORMS, shares, type CycleMix, type Downloads, type PlatformUsers } from "./dashboardTypes";
 import type { AiUsage, CommandCenter } from "./types";
 import type { TrafficData } from "./trafficTypes";
@@ -140,6 +141,8 @@ export default function OverviewPage() {
           </>}
         </Panel>
       </div>
+
+      <FunnelPlanCards billing={b} canBilling={canBilling} />
 
       <ApiCallLogPanel todayRequests={usage.data?.todayEvents} />
 

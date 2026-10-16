@@ -7,3 +7,32 @@ html[data-theme="light"] .ui-panel {
 html[data-theme="light"] .ui-btn { border-radius: 999px; }
 html[data-theme="light"] .ui-page-title { color: rgb(var(--fg)); text-shadow: none; }
 html[data-theme="light"] .ui-panel-head { border-radius: 20px 20px 0 0; }
+
+/* KPI cards (approved admin design): every StatStrip renders as a row of
+ * separate cards with a violet top accent, in Light and Dark. Rose keeps its
+ * own treatment (rose.css). Stacks to one column at 390px. */
+html:not([data-theme="rose"]) .ui-statstrip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 170px), 1fr));
+  grid-auto-flow: row;
+  gap: 12px;
+  border: 0;
+  background: transparent;
+  border-radius: 0;
+}
+html:not([data-theme="rose"]) .ui-statstrip > * { border: 0 !important; }
+html:not([data-theme="rose"]) .ui-statstrip > .ui-stat {
+  position: relative;
+  overflow: hidden;
+  padding: 14px 16px;
+  border: 1px solid rgb(var(--line)) !important;
+  border-radius: 14px;
+  background: rgb(var(--panel));
+  box-shadow: 0 4px 18px rgb(40 24 90 / .04);
+}
+html:not([data-theme="rose"]) .ui-statstrip > .ui-stat::before {
+  content: ""; position: absolute; inset: 0 0 auto 0; height: 3px;
+  background: linear-gradient(90deg, rgb(var(--accent)), #c06cff); opacity: .75;
+}
+html:not([data-theme="rose"]) .ui-stat-value { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.01em; white-space: normal; }
+html:not([data-theme="rose"]) .ui-stat-hint { white-space: normal; }
